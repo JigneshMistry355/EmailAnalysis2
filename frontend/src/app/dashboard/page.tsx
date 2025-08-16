@@ -5,6 +5,8 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { log } from "console";
+import { useAuth } from "../contexts/AuthContext";
 
 type EmailSummary = {
     id: any;
@@ -21,19 +23,23 @@ type EmailSummary = {
 
 export default function Dashboard(){
 
-    useEffect(() => {
-        // Ensure this code runs only on the client side
-        if (typeof window !== 'undefined') {
-          // Your client-side code here
-        }
-      }, []);
-
+    const { token, logout } = useAuth();
     const router = useRouter();
     const pathName = usePathname();
+    const [user, setUser] = useState<any>(null);
+
+    const api = axios.create({
+        baseURL: 'http://localhost:8000',
+    });
+
+ 
 
     const myData = {"Email_b'5025'": {"Sender_Name": "Highire Manpower Services", "Sender_Email": "vacancy@openings.shine.com", "Subject": "Urgent Hiring for Front End Developer at Freelancer", "Response": "Here is a short summary:\n\n\"Urgent hiring for Front End Developer at Freelancer. Job posting from Highire Manpower Services (vacancy@openings.shine.com) on October 21, 2024.\""}, "Email_b'5026'": {"Sender_Name": "", "Sender_Email": "olivia@mail.nanonets.com", "Subject": "Curious About Nanonets? ", "Response": "Here is a short summary:\n\n\"Job inquiry about Nanonets from Olivia (olivia@mail.nanonets.com) on October 21, 2024.\""}, "Email_b'5027'": {"Sender_Name": "Indeed Apply", "Sender_Email": "indeedapply@indeed.com", "Subject": "Indeed Application: Data Scientist (AI Model Training & Insights)", "Response": "Here is a short summary:\n\n\"Job application for Data Scientist (AI Model Training & Insights) at Indeed Apply (indeedapply@indeed.com) on October 21, 2024.\""}, "Email_b'5028'": {"Sender_Name": "Indeed Apply", "Sender_Email": "indeedapply@indeed.com", "Subject": "Indeed Application: AI/ML Developer", "Response": "Here is the generated short summary:\n\n\"Job application for AI/ML Developer at Indeed Apply (indeedapply@indeed.com) on October 21, 2024.\""}, "Email_b'5029'": {"Sender_Name": "RITIK RAHI", "Sender_Email": "invitations@linkedin.com", "Subject": "Sahil, please add me to your LinkedIn network", "Response": "Here is a short summary:\n\nSahil Jadhav (Jr. AI Developer) has sent you an invitation to connect on LinkedIn. This email was intended for Sahil, but it appears you received an invitation to join his professional network. You can accept or decline the invitation by clicking on the provided link."}, "Email_b'5030'": {"Sender_Name": "upGrad", "Sender_Email": "alerts@admissions.upgrad.com", "Subject": "Can't wait to get ahead? Here's the program you've been looking for!", "Response": "Here is a short summary:\n\nYou have received an email from upGrad (alerts@admissions.upgrad.com) on October 21, 2024 at 7:44 AM. The subject of the email is \"Can't wait to get ahead? Here's the program you've been looking for!\"."}, "Email_b'5031'": {"Sender_Name": "Highire Manpower Services", "Sender_Email": "vacancy@openings.shine.com", "Subject": "Urgent Hiring for Customer Relation Officer at Hdfc Bank", "Response": "Here is a short summary:\n\nYou have received an email from Highire Manpower Services (vacancy@openings.shine.com) on October 21, 2024 at 1:24 PM. The subject of the email is \"Urgent Hiring for Customer Relation Officer at Hdfc Bank\"."}, "Email_b'5032'": {"Sender_Name": "Amity University", "Sender_Email": "mail@timesjobs.com", "Subject": "You are selected for MBA(Online) program with Amity University", "Response": "Here is a short summary of the content:\n\n\"You are selected for an MBA (Online) program. Click on 'Edit your details' to confirm and edit your information if needed. This email was sent by TimesJobs.com as part of their service.\""}, "Email_b'5033'": {"Sender_Name": "Amity University", "Sender_Email": "mail@timesjobs.com", "Subject": "You are selected for MBA(Online) program with Amity University", "Response": "Here is a short summary:\n\nYou have been selected for the MBA (Online) program. You are receiving this email as you are a registered user with TimesJobs.com. The link provided can be used to edit your details or unsubscribe from further emails."}, "Email_b'5034'": {"Sender_Name": "upGrad", "Sender_Email": "alerts@admissions.upgrad.com", "Subject": "Start Now ", "Response": "Here is a short summary:\n\n\"Congratulations! You have been selected for the MBA (Online) program. - upGrad <alerts@admissions.upgrad.com> on October 21, 2024 at 9:29:05 AM.\""}, "Email_b'5035'": {"Sender_Name": "LinkedIn", "Sender_Email": "jobs-listings@linkedin.com", "Subject": "Stealth Startup is hiring a Machine Learning Engineer", "Response": "Here is a short summary:\n\n**Job Opportunity:**\n\nStealth Startup is hiring a Machine Learning Engineer. This job opportunity was sent to you because you have opted-in for \"Jobs You Might Be Interested In\" emails from LinkedIn."}, "Email_b'5036'": {"Sender_Name": "Naukri", "Sender_Email": "info@naukri.com", "Subject": "Feedback on your Naukri job applies done since last week", "Response": "This appears to be an HTML email template from Naukri, a popular Indian job search platform. The email contains a table with several rows and columns, including a link to \"Security Advice\" for more information.\n\nThe main content of the email is not visible as it's encoded in a way that requires decryption to view. However, the surrounding HTML code suggests that this email may be related to a job application or job search activity on Naukri."}, "Email_b'5037'": {"Sender_Name": "Ashwini Poojari", "Sender_Email": "ashwini.poojari@datenwissen.com", "Subject": "Invitation from an unknown sender: AI - Interview  @ Tue 22 Oct 2024\r\n 5pm - 5:10pm (IST) (sahiljadhav25009@gmail.com)", "Response": "Here is a short summary:\n\nThe email is an invitation from Ashwini Poojari to an AI Interview on October 22, 2024, at 5:00-5:10 pm IST (India Standard Time - Kolkata). The interview will take place via Google Meet and also offers phone-in options. The email includes links for more information and details about the event."}}
 
     const myDate1 = {"Email_b'5161'": {"Sender_Name": "", "Sender_Email": "olivia@mail.nanonets.com", "Subject": "Cut Manual Data Entry by 80% Instantly, here's how!", "Response": "Here are the short summaries:\n\n1. {'subject': 'Top Jobs from Leading IT/Tech Companies like Amazon, Ola, Paytm etc', 'sender_name': 'hirist.tech', 'sender_email': 'info@hirist.tech', 'email_date': '28-Oct-2024 03:42:11', 'body': 'Please Enable Javascript'}\n\"Unlock top job opportunities from renowned IT/Tech companies like Amazon, Ola, and Paytm with Hirist.tech's exclusive list.\"\n\n2. {'subject': \"Cut Manual Data Entry by 80% Instantly, here's how!\", 'sender_name': '', 'sender_email': 'olivia@mail.nanonets.com', 'email_date': '28-Oct-2024 05:26:44'}\n\"Discover a game-changing way to automate data entry and boost productivity by 80%. Get instant access to the solution from Nanonets.\"", "Email_date": "28-Oct-2024 05:26:44"}, "Email_b'5160'": {"Sender_Name": "hirist.tech", "Sender_Email": "info@hirist.tech", "Subject": "Top Jobs from Leading IT/Tech Companies like Amazon, Ola, Paytm etc", "Response": "Here is a short summary:\n\n\"Get the latest job updates from top IT/Tech companies like Amazon, Ola, and Paytm. Stay ahead in your career with Hirist.tech's exclusive list of leading jobs.\"", "Email_date": "28-Oct-2024 03:42:11"}};
+
+    
+
 
     const [summary, setSummary] = useState<Record<string, EmailSummary> | null>(null);
     const [data, setData] = useState<Record<string, EmailSummary> | null>(null);
@@ -45,6 +51,24 @@ export default function Dashboard(){
     const [sortByCategory, setSortByCategory] = useState(false);
     const [reverseDate, setReverseDate] = useState(true);
     const [sortedByPriority, setSortedByPriority] = useState(false);
+
+    useEffect(() => {
+        if (!token) {
+            // logout();
+            console.log("EMPTY TOKEN ________________________________________________")
+            return;
+        }
+        api.get("/users/me/", {headers: { Authorization: `Bearer ${token}` },})
+        .then((res) => {
+            setUser(res.data);
+            console.log("User fetched:", res.data);
+        })
+        .catch(() => router.push("/Login"))
+
+        console.log("#################################################")
+        console.log("JWT", user)
+        console.log("#################################################")
+      }, [token]);
 
     useEffect(() => {
        
@@ -67,6 +91,12 @@ export default function Dashboard(){
         }
       }, []);
 
+      useEffect(() => {
+        if (user){
+            console.log("Updated user state: ", user);
+        }
+      }, [user]);
+
 
     const sortByDateList = () => {
         setSortByCategory(false);
@@ -77,18 +107,25 @@ export default function Dashboard(){
     const fetchData = async () => {
         try {
             setIsLoading(true)
-            console.log("Into fetchData try ... fetching data!")
-            const response = await axios.get('http://127.0.0.1:8000/');
+            console.log("Into fetchData try ... fetching data!");
+            // const token = localStorage.getItem("token");
+            console.log("TOKEN CHECL :::::::::::::::::::: ############## ::::::::::::::::", token);
+            const response = await axios.get('http://127.0.0.1:8000/', {headers: {Authorization: `Bearer ${token}`}});
             console.log('//////////////////////////////////////////////////////////////////////////////')
-            console.log(response.data);
+            console.log(response.data.status);
             console.log('//////////////////////////////////////////////////////////////////////////////')
             setSummary(response.data);
             console.log("Saving data to local storage")
             localStorage.setItem("myData", JSON.stringify(response.data))
             setIsLoading(false)
+            
 
-        }catch(error) {
+        }catch(error: any) {
             console.error("Error fetching data : ", error);
+            if (error.status == 401){
+                alert("Unauthorized Access ...!");
+                logout();
+            }
         }
     }
 
